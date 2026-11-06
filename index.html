@@ -37,7 +37,6 @@
         .panel { display: none; }
         .panel.active { display: block; }
         
-        /* Contenedor del selector de dirección de idioma */
         .language-selector-bar {
             display: flex;
             align-items: center;
@@ -50,8 +49,24 @@
             border: 1px solid #e2e8f0;
         }
         .lang-label { font-weight: 700; font-size: 15px; color: var(--asalvoo-burgundy); }
-        .btn-swap { background: white; border: 1px solid #cbd5e1; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-size: 16px; transition: transform 0.2s; }
-        .btn-swap:active { transform: rotate(180deg); }
+        
+        .btn-swap { 
+            background: white; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 50%; 
+            width: 38px; 
+            height: 38px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            font-size: 18px; 
+            font-weight: 900;
+            color: var(--asalvoo-burgundy);
+            transition: transform 0.2s; 
+        }
+        .btn-swap:active { transform: scale(0.9); }
 
         .btn-main { 
             width: 100%; 
@@ -116,10 +131,10 @@
     <!-- PANEL TRADUCTOR -->
     <div id="panel-traductor" class="panel active">
         
-        <!-- Barra selectora e intercambiadora de idiomas -->
         <div class="language-selector-bar">
             <span id="lang-from-label" class="lang-label">Español</span>
-            <button class="btn-swap" onclick="swapLanguages()">🔄</button>
+            <!-- Corregido el icono por el símbolo universal -->
+            <button class="btn-swap" onclick="swapLanguages()">⇄</button>
             <span id="lang-to-label" class="lang-label">Criollo Haitiano</span>
         </div>
 
@@ -156,8 +171,6 @@
     let translator;
     let isFlipped = false;
     let currentCardIndex = 0;
-    
-    // Control de dirección del idioma: 'es-ht' (Español a Criollo) o 'ht-es' (Criollo a Español)
     let currentDirection = 'es-ht'; 
 
     const vocabulario = [
@@ -165,7 +178,7 @@
         { es: "Muchas gracias por tu ayuda", ht: "Mèsi anpil pou èd ou" },
         { es: "Por favor, habla más despacio", ht: "Tanpri, pale pi dousman" },
         { es: "Todo estará bien", ht: "Tout bagay ap byen pase" },
-        { es: "¿Dónde está el hospital?", ht: "Kote lopital la ye?" },
+        { es: "Dónde está el hospital?", ht: "Kote lopital la ye?" },
         { es: "Mucho gusto en conocerte", ht: "Mwen byen kontan rankontre ou" },
         { es: "¿Cuánto cuesta esto?", ht: "Konbe sa koute?" }
     ];
@@ -184,12 +197,9 @@
         }
     }
 
-    // Intercambiar idiomas dinámicamente
     window.swapLanguages = function() {
         currentDirection = (currentDirection === 'es-ht') ? 'ht-es' : 'es-ht';
         updateInterfaceLabels();
-        
-        // Limpiar las cajas al cambiar de idioma
         document.getElementById('input-text').innerText = "...";
         document.getElementById('output-text').innerText = "...";
     }
