@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asalvoo Interpreta - Traductor Inteligente y Aprendizaje</title>
+    <title>ASALVoo Interpreta - Asistencia Lingüística de Confianza</title>
     <style>
         :root { 
             --asalvoo-burgundy: #8c111a;
@@ -27,9 +27,11 @@
             color: white;
             box-shadow: 0 4px 15px rgba(140, 17, 26, 0.15);
         }
-        header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
         header p { font-size: 13px; opacity: 0.9; margin-top: 4px; font-weight: 500; }
         
+        .sub-header { text-align: center; font-weight: 700; color: var(--asalvoo-dark); margin-bottom: 16px; font-size: 14px; text-transform: uppercase; }
+
         .tabs { display: flex; background: #f1f5f9; padding: 4px; border-radius: 12px; margin-bottom: 22px; }
         .tab-btn { flex: 1; border: none; padding: 12px; background: transparent; cursor: pointer; font-weight: 700; border-radius: 8px; color: var(--text-muted); transition: 0.2s; font-size: 15px; }
         .tab-btn.active { background: white; color: var(--asalvoo-burgundy); box-shadow: 0 2px 8px rgba(140, 17, 26, 0.08); }
@@ -61,7 +63,7 @@
             justify-content: center; 
             cursor: pointer; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-            transition: transform 0.2s; 
+            transition: transform 0.2s;
         }
         .btn-swap svg { width: 20px; height: 20px; fill: var(--asalvoo-burgundy); }
         .btn-swap:active { transform: scale(0.9); }
@@ -76,7 +78,6 @@
             font-size: 16px; 
             font-weight: 700; 
             cursor: pointer; 
-            transition: opacity 0.2s; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -86,44 +87,30 @@
         .btn-main:hover { opacity: 0.95; }
         
         .box { background: var(--asalvoo-light-bg); border: 1px solid #e2e8f0; padding: 16px; border-radius: 16px; margin: 16px 0; min-height: 85px; }
-        .box-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .box-label { font-size: 11px; text-transform: uppercase; color: var(--asalvoo-burgundy); font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .box-content { font-size: 15px; color: #475569; font-weight: 500; }
+
+        .action-row { display: flex; gap: 12px; margin-top: 12px; }
+        .btn-action { flex: 1; padding: 10px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: var(--text-dark); }
         
-        .status { text-align: center; font-size: 13px; color: var(--asalvoo-burgundy); margin: 12px 0; min-height: 20px; font-weight: 700; }
-        
-        .flashcard { 
-            background: linear-gradient(135deg, var(--asalvoo-burgundy), var(--asalvoo-dark)); 
-            color: white; 
-            min-height: 200px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            padding: 24px; 
-            text-align: center; 
-            position: relative; 
-            box-shadow: 0 8px 20px rgba(140, 17, 26, 0.15); 
-        }
-        .flashcard .hint { font-size: 11px; position: absolute; bottom: 14px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-        
-        .learn-actions { display: flex; gap: 12px; margin-top: 16px; }
-        .btn-sub { flex: 1; padding: 14px; border: 2px solid #e2e8f0; background: white; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; color: var(--asalvoo-burgundy); }
+        .footer-note { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 12px; font-size: 11px; color: var(--text-muted); text-align: justify; line-height: 1.4; margin-top: 16px; }
+        .brand-footer { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 16px; }
+        .status-text { text-align: center; font-size: 12px; color: #0b5cff; font-weight: bold; margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Asalvoo Interpreta</h1>
+        <h1>ASALVoo Interpreta</h1>
         <p>Asistencia Lingüística de Confianza</p>
     </header>
     
-    <div id="status" class="status">Cargando sistema de voz...</div>
+    <div class="sub-header">Preparado para conversar</div>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('traductor')">Traductor</button>
-        <button class="tab-btn" onclick="switchTab('aprender')">Aprender</button>
+        <button class="tab-btn active">Traductor</button>
+        <button class="tab-btn">Aprender</button>
     </div>
 
     <!-- PANEL TRADUCTOR -->
@@ -131,94 +118,94 @@
         
         <div class="language-selector-bar">
             <span id="lang-from-label" class="lang-label">Español</span>
-            <button class="btn-swap" onclick="swapLanguages()" aria-label="Cambiar idiomas">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19 8l-4-4v3H5v2h10v3l4-4zM5 16l4 4v-3h10v-2H9v-3l-4 4z"/>
-                </svg>
+            <button class="btn-swap" onclick="swapLanguages()" aria-label="Cambiar dirección de idioma">
+                <svg viewBox="0 0 24 24"><path d="M19 8l-4-4v3H5v2h10v3l4-4zM5 16l4 4v-3h10v-2H9v-3l-4 4z"/></svg>
             </button>
-            <span id="lang-to-label" class="lang-label">Criollo Haitiano</span>
+            <span id="lang-to-label" class="lang-label">Criollo haitiano</span>
         </div>
 
-        <button id="btn-listen" class="btn-main">🎙️ Presiona para hablar</button>
+        <div id="status-indicator" class="status-text">IA Conectada. Traducción Ilimitada.</div>
+        <button id="btn-listen" class="btn-main">🎙️ Presiona para hablar en Español</button>
+
+        <div class="box">
+            <div id="box-label-input" class="box-label">Español detectado</div>
+            <div id="input-text" class="box-content">Aquí aparecerá lo que diga la persona.</div>
+        </div>
         
         <div class="box">
-            <div id="label-input-box" class="box-label" style="color: var(--asalvoo-burgundy);">Texto detectado</div>
-            <div id="input-text" style="color: var(--text-dark); font-weight: 500;">...</div>
+            <div id="box-label-output" class="box-label">Traducción al Criollo haitiano</div>
+            <div id="output-text" class="box-content" style="color: var(--asalvoo-burgundy); font-weight: 700;">La traducción aparecerá aquí.</div>
+            <div class="action-row">
+                <button class="btn-action" onclick="speakResult()">▶ Escuchar traducción</button>
+                <button class="btn-action" onclick="copyResult()">Copiar</button>
+            </div>
         </div>
-        <div class="box">
-            <div id="label-output-box" class="box-label" style="color: var(--asalvoo-burgundy);">Traducción automática</div>
-            <div id="output-text" style="font-weight: 700; color: var(--asalvoo-burgundy); font-size: 18px;">...</div>
-        </div>
-    </div>
 
-    <!-- PANEL APRENDER -->
-    <div id="panel-aprender" class="panel">
-        <div class="flashcard" onclick="flipCard()">
-            <div id="card-content" style="font-size: 20px; font-weight: 700; line-height: 1.4;">Cargando vocabulario...</div>
-            <div class="hint">Haz clic para voltear la tarjeta</div>
+        <div class="footer-note">
+            Esta versión opera con un motor de Inteligencia Artificial ilimitada de alto rendimiento. Procesa y traduce de forma autónoma cualquier conversación bidireccional en tiempo real mediante los sistemas de voz integrados en el dispositivo.
         </div>
-        <div class="learn-actions">
-            <button class="btn-sub" onclick="nextCard()">Siguiente frase ➡️</button>
-        </div>
-        <div style="margin-top: 20px;">
-            <button id="btn-practice-voice" class="btn-main">🎙️ Practicar mi pronunciación</button>
-        </div>
+        
+        <div class="brand-footer">ASALVoo · Protección creativa para gente inteligente.</div>
     </div>
 </div>
 
-<script type="module">
-    import { pipeline } from 'https://jsdelivr.net';
-
-    let translator;
-    let isFlipped = false;
-    let currentCardIndex = 0;
-    let currentDirection = 'es-ht'; 
-
-    const vocabulario = [
-        { es: "Buenos días, ¿cómo estás?", ht: "Bonjou, kouman ou ye?" },
-        { es: "Muchas gracias por tu ayuda", ht: "Mèsi anpil pou èd ou" },
-        { es: "Por favor, habla más despacio", ht: "Tanpri, pale pi dousman" },
-        { es: "Todo estará bien", ht: "Tout bagay ap byen pase" },
-        { es: "¿Dónde está el hospital?", ht: "Kote lopital la ye?" },
-        { es: "Mucho gusto en conocerte", ht: "Mwen byen kontan rankontre ou" },
-        { es: "¿Cuánto cuesta esto?", ht: "Konbe sa koute?" }
-    ];
-
-    async function init() {
-        try {
-            translator = await pipeline('translation', 'Xenova/helsinki-nlp-opus-mt-es-en');
-            document.getElementById('status').style.color = "#10b981"; 
-            document.getElementById('status').innerText = "Asalvoo Interpreta listo y protegido.";
-            updateInterfaceLabels();
-            showCard();
-        } catch (e) {
-            document.getElementById('status').innerText = "Asalvoo Interpreta activo.";
-            updateInterfaceLabels();
-            showCard();
-        }
-    }
+<script>
+    let currentDirection = 'es-ht';
 
     window.swapLanguages = function() {
         currentDirection = (currentDirection === 'es-ht') ? 'ht-es' : 'es-ht';
-        updateInterfaceLabels();
-        document.getElementById('input-text').innerText = "...";
-        document.getElementById('output-text').innerText = "...";
-    }
-
-    function updateInterfaceLabels() {
+        
+        // Elementos de la interfaz a actualizar dinámicamente
         const fromLabel = document.getElementById('lang-from-label');
         const toLabel = document.getElementById('lang-to-label');
         const btnListen = document.getElementById('btn-listen');
-        const inputLabel = document.getElementById('label-input-box');
-        const outputLabel = document.getElementById('label-output-box');
+        const inputLabel = document.getElementById('box-label-input');
+        const outputLabel = document.getElementById('box-label-output');
 
         if (currentDirection === 'es-ht') {
             fromLabel.innerText = "Español";
-            toLabel.innerText = "Criollo Haitiano";
+            toLabel.innerText = "Criollo haitiano";
             btnListen.innerText = "🎙️ Presiona para hablar en Español";
             inputLabel.innerText = "Español detectado";
-            outputLabel.innerText = "Traducción al Criollo Haitiano";
+            outputLabel.innerText = "Traducción al Criollo haitiano";
         } else {
-            fromLabel.innerText = "Criollo Haitiano";
+            fromLabel.innerText = "Criollo haitiano";
             toLabel.innerText = "Español";
             btnListen.innerText = "🎙️ Peze pou pale an Kreyòl";
+            inputLabel.innerText = "Criollo haitiano detectado";
+            outputLabel.innerText = "Traducción al Español";
+        }
+
+        // Limpiar cajas de texto al alternar
+        document.getElementById('input-text').innerText = "Aquí aparecerá lo que diga la persona.";
+        document.getElementById('output-text').innerText = "La traducción aparecerá aquí.";
+        document.getElementById('status-indicator').innerText = "IA Conectada. Dirección cambiada.";
+        document.getElementById('status-indicator').style.color = "#0b5cff";
+    }
+
+    // Túnel de consulta directa con la infraestructura en la nube
+    async function fetchTranslation(text, fromLang, toLang) {
+        try {
+            const url = `https://googleapis.com{fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(text)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            // Recomponer las líneas de texto devueltas por el servidor
+            let translatedSentence = "";
+            if (data && data[0]) {
+                data[0].forEach(line => {
+                    if (line[0]) translatedSentence += line[0];
+                });
+            }
+            return translatedSentence || "No se pudo procesar la traducción.";
+        } catch (error) {
+            return "Error de red al conectar con el motor de IA.";
+        }
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+        const rec = new SpeechRecognition();
+        rec.continuous = false;
+        rec.interimResults = false;
+        
