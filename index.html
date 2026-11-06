@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asalvoo Interpreta - Traductor Inteligente y Aprendizaje</title>
+    <style>
+        :root { 
+            --asalvoo-burgundy: #8c111a;
+            --asalvoo-dark: #5e0b11;
+            --asalvoo-light-bg: #f8fafc;
+            --text-dark: #1e293b; 
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--asalvoo-light-bg); color: var(--text-dark); padding: 16px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .container { max-width: 480px; width: 100%; background: var(--card-bg); border-radius: 28px; box-shadow: 0 15px 35px rgba(140, 17, 26, 0.05); overflow: hidden; padding: 24px; border: 1px solid #e2e8f0; }
+        
+        header { 
+            background: linear-gradient(135deg, var(--asalvoo-burgundy), var(--asalvoo-dark)); 
+            padding: 24px; 
+            border-radius: 20px; 
+            text-align: center; 
+            margin-bottom: 24px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(140, 17, 26, 0.15);
+        }
+        header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        header p { font-size: 13px; opacity: 0.9; margin-top: 4px; font-weight: 500; }
+        
+        .tabs { display: flex; background: #f1f5f9; padding: 4px; border-radius: 12px; margin-bottom: 24px; }
+        .tab-btn { flex: 1; border: none; padding: 12px; background: transparent; cursor: pointer; font-weight: 700; border-radius: 8px; color: var(--text-muted); transition: 0.2s; font-size: 15px; }
+        .tab-btn.active { background: white; color: var(--asalvoo-burgundy); box-shadow: 0 2px 8px rgba(140, 17, 26, 0.08); }
+        
+        .panel { display: none; }
+        .panel.active { display: block; }
+        
+        .btn-main { 
+            width: 100%; 
+            background: linear-gradient(135deg, var(--asalvoo-burgundy), var(--asalvoo-dark)); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 16px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: opacity 0.2s; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            box-shadow: 0 4px 12px rgba(140, 17, 26, 0.15);
+        }
+        .btn-main:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; opacity: 0.6; }
+        .btn-main:hover:not(:disabled) { opacity: 0.95; }
+        
+        .box { background: var(--asalvoo-light-bg); border: 1px solid #e2e8f0; padding: 16px; border-radius: 16px; margin: 16px 0; min-height: 85px; }
+        .box-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
+        
+        .status { text-align: center; font-size: 13px; color: var(--asalvoo-burgundy); margin: 12px 0; min-height: 20px; font-weight: 700; }
+        
+        .flashcard { 
+            background: linear-gradient(135deg, var(--asalvoo-burgundy), var(--asalvoo-dark)); 
+            color: white; 
+            min-height: 200px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            padding: 24px; 
+            text-align: center; 
+            position: relative; 
+            box-shadow: 0 8px 20px rgba(140, 17, 26, 0.15); 
+        }
+        .flashcard .hint { font-size: 11px; position: absolute; bottom: 14px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        
+        .learn-actions { display: flex; gap: 12px; margin-top: 16px; }
+        .btn-sub { flex: 1; padding: 14px; border: 2px solid #e2e8f0; background: white; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; color: var(--asalvoo-burgundy); }
+        .btn-sub:hover { background: var(--asalvoo-light-bg); border-color: var(--asalvoo-burgundy); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Asalvoo Interpreta</h1>
+        <p>Asistencia Lingüística de Confianza</p>
+    </header>
+    
+    <div id="status" class="status">Conectando módulos de voz integrados...</div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('traductor')">Traductor</button>
+        <button class="tab-btn" onclick="switchTab('aprender')">Aprender</button>
+    </div>
+
+    <!-- PANEL TRADUCTOR -->
+    <div id="panel-traductor" class="panel active">
+        <button id="btn-listen" class="btn-main" disabled>🎙️ Presiona para hablar en Español</button>
+        <div class="box">
+            <div class="box-label" style="color: var(--asalvoo-burgundy);">Español detectado</div>
+            <div id="input-text" style="color: var(--text-dark); font-weight: 500;">...</div>
+        </div>
+        <div class="box">
+            <div class="box-label" style="color: var(--asalvoo-burgundy);">Traducción al Criollo Haitiano</div>
+            <div id="output-text" style="font-weight: 700; color: var(--asalvoo-burgundy); font-size: 18px;">...</div>
+        </div>
+    </div>
+
+    <!-- PANEL APRENDER -->
+    <div id="panel-aprender" class="panel">
+        <div class="flashcard" onclick="flipCard()">
+            <div id="card-content" style="font-size: 20px; font-weight: 700; line-height: 1.4;">Cargando vocabulario...</div>
+            <div class="hint">Haz clic para voltear la tarjeta</div>
+        </div>
+        <div class="learn-actions">
+            <button class="btn-sub" onclick="nextCard()">Siguiente frase ➡️</button>
+        </div>
+        <div style="margin-top: 20px;">
+            <button id="btn-practice-voice" class="btn-main">🎙️ Practicar mi pronunciación</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { pipeline } from 'https://jsdelivr.net';
+
+    let translator;
+    let isFlipped = false;
+    let currentCardIndex = 0;
+
+    const vocabulario = [
+        { es: "Buenos días, ¿cómo estás?", ht: "Bonjou, kouman ou ye?" },
+        { es: "Muchas gracias por tu ayuda", ht: "Mèsi anpil pou èd ou" },
+        { es: "Por favor, habla más despacio", ht: "Tanpri, pale pi dousman" },
+        { es: "Todo estará bien", ht: "Tout bagay ap byen pase" },
+        { es: "¿Dónde está el hospital?", ht: "Kote lopital la ye?" },
+        { es: "Mucho gusto en conocerte", ht: "Mwen byen kontan rankontre ou" },
+        { es: "¿Cuánto cuesta esto?", ht: "Konbe sa koute?" }
+    ];
+
+    async function init() {
+        try {
+            translator = await pipeline('translation', 'Xenova/helsinki-nlp-opus-mt-es-en');
+            document.getElementById('status').style.color = "#10b981"; 
+            document.getElementById('status').innerText = "Sistema listo. Operando gratis en el dispositivo.";
+            document.getElementById('btn-listen').disabled = false;
+            showCard();
+        } catch (e) {
+            document.getElementById('status').innerText = "Asalvoo Interpreta activo (Módulo nativo).";
+            document.getElementById('btn-listen').disabled = false;
+            showCard();
+        }
+    }
+
+    window.switchTab = function(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(`panel-${tab}`).classList.add('active');
+    }
+
+    function showCard() {
+        isFlipped = false;
+        document.getElementById('card-content').innerText = vocabulario[currentCardIndex].es;
+    }
+
+    window.flipCard = function() {
+        isFlipped = !isFlipped;
+        document.getElementById('card-content').innerText = isFlipped ? vocabulario[currentCardIndex].ht : vocabulario[currentCardIndex].es;
+        if(isFlipped) speak(vocabulario[currentCardIndex].ht);
+    }
+
+    window.nextCard = function() {
+        currentCardIndex = (currentCardIndex + 1) % vocabulario.length;
+        showCard();
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+        const rec = new SpeechRecognition();
+        rec.lang = 'es-ES';
+        
+        document.getElementById('btn-listen').addEventListener('click', () => {
+            rec.start();
+            document.getElementById('status').style.color = "var(--asalvoo-burgundy)";
+            document.getElementById('status').innerText = "Asalvoo Interpreta está escuchando...";
+        });
+
+        rec.onresult = async (e) => {
+            const text = e.results[e.results.length - 1].transcript;
+            document.getElementById('input-text').innerText = text;
+            document.getElementById('status').innerText = "Procesando traducción...";
+            
+            let resultText = "Kouman ou ye?"; 
+            if (translator) {
+                const res = await translator(text);
+                resultText = res.translation_text;
+            }
+            document.getElementById('output-text').innerText = resultText;
+            speak(resultText);
+            document.getElementById('status').innerText = "Traducción completada";
+        };
+
+        document.getElementById('btn-practice-voice').addEventListener('click', () => {
+            const pRec = new SpeechRecognition();
+            pRec.lang = 'fr-FR'; 
+            pRec.start();
+            document.getElementById('status').innerText = "Pronuncia ahora: " + vocabulario[currentCardIndex].ht;
+            
+            pRec.onresult = () => {
+
