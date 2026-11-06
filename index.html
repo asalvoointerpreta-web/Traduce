@@ -83,8 +83,30 @@
             justify-content: center; 
             gap: 10px; 
             box-shadow: 0 4px 12px rgba(140, 17, 26, 0.15);
+            margin-bottom: 12px;
         }
         .btn-main:hover { opacity: 0.95; }
+        
+        /* Botón de Compartir con estilo secundario elegante */
+        .btn-share-app {
+            width: 100%;
+            background: white;
+            color: var(--asalvoo-burgundy);
+            border: 2px solid var(--asalvoo-burgundy);
+            padding: 14px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+            margin-bottom: 16px;
+        }
+        .btn-share-app:hover { background: #fff5f5; }
+        .btn-share-app svg { width: 18px; height: 18px; fill: var(--asalvoo-burgundy); }
         
         .box { background: var(--asalvoo-light-bg); border: 1px solid #e2e8f0; padding: 16px; border-radius: 16px; margin: 16px 0; min-height: 85px; }
         .box-label { font-size: 11px; text-transform: uppercase; color: var(--asalvoo-burgundy); font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
@@ -125,7 +147,17 @@
         </div>
 
         <div id="status-indicator" class="status-text">IA Conectada. Traducción Ilimitada.</div>
+        
+        <!-- Botón Principal del Micrófono -->
         <button id="btn-listen" class="btn-main">🎙️ Presiona para hablar en Español</button>
+        
+        <!-- Nuevo Botón de Compartir Integrado Nativamente -->
+        <button class="btn-share-app" onclick="shareApplication()">
+            <svg viewBox="0 0 24 24">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/>
+            </svg>
+            Compartir esta Aplicación
+        </button>
 
         <div class="box">
             <div id="box-label-input" class="box-label">Español detectado</div>
@@ -155,7 +187,6 @@
     window.swapLanguages = function() {
         currentDirection = (currentDirection === 'es-ht') ? 'ht-es' : 'es-ht';
         
-        // Elementos de la interfaz a actualizar dinámicamente
         const fromLabel = document.getElementById('lang-from-label');
         const toLabel = document.getElementById('lang-to-label');
         const btnListen = document.getElementById('btn-listen');
@@ -176,36 +207,4 @@
             outputLabel.innerText = "Traducción al Español";
         }
 
-        // Limpiar cajas de texto al alternar
         document.getElementById('input-text').innerText = "Aquí aparecerá lo que diga la persona.";
-        document.getElementById('output-text').innerText = "La traducción aparecerá aquí.";
-        document.getElementById('status-indicator').innerText = "IA Conectada. Dirección cambiada.";
-        document.getElementById('status-indicator').style.color = "#0b5cff";
-    }
-
-    // Túnel de consulta directa con la infraestructura en la nube
-    async function fetchTranslation(text, fromLang, toLang) {
-        try {
-            const url = `https://googleapis.com{fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(text)}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            // Recomponer las líneas de texto devueltas por el servidor
-            let translatedSentence = "";
-            if (data && data[0]) {
-                data[0].forEach(line => {
-                    if (line[0]) translatedSentence += line[0];
-                });
-            }
-            return translatedSentence || "No se pudo procesar la traducción.";
-        } catch (error) {
-            return "Error de red al conectar con el motor de IA.";
-        }
-    }
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-        const rec = new SpeechRecognition();
-        rec.continuous = false;
-        rec.interimResults = false;
-        
