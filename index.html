@@ -50,7 +50,6 @@
         }
         .lang-label { font-weight: 700; font-size: 15px; color: var(--asalvoo-burgundy); width: 110px; text-align: center; }
         
-        /* Botón de intercambio optimizado */
         .btn-swap { 
             background: white; 
             border: 1px solid #cbd5e1; 
@@ -64,11 +63,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
             transition: transform 0.2s; 
         }
-        .btn-swap svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--asalvoo-burgundy); /* Cambia el color de las flechas a borgoña */
-        }
+        .btn-swap svg { width: 20px; height: 20px; fill: var(--asalvoo-burgundy); }
         .btn-swap:active { transform: scale(0.9); }
 
         .btn-main { 
@@ -88,7 +83,7 @@
             gap: 10px; 
             box-shadow: 0 4px 12px rgba(140, 17, 26, 0.15);
         }
-        .btn-main:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; opacity: 0.6; }
+        .btn-main:hover { opacity: 0.95; }
         
         .box { background: var(--asalvoo-light-bg); border: 1px solid #e2e8f0; padding: 16px; border-radius: 16px; margin: 16px 0; min-height: 85px; }
         .box-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
@@ -124,7 +119,7 @@
         <p>Asistencia Lingüística de Confianza</p>
     </header>
     
-    <div id="status" class="status">Conectando módulos de voz integrados...</div>
+    <div id="status" class="status">Cargando sistema de voz...</div>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('traductor')">Traductor</button>
@@ -136,7 +131,6 @@
         
         <div class="language-selector-bar">
             <span id="lang-from-label" class="lang-label">Español</span>
-            <!-- Gráfico vectorial puro que no puede fallar en pantallas móviles -->
             <button class="btn-swap" onclick="swapLanguages()" aria-label="Cambiar idiomas">
                 <svg viewBox="0 0 24 24">
                     <path d="M19 8l-4-4v3H5v2h10v3l4-4zM5 16l4 4v-3h10v-2H9v-3l-4 4z"/>
@@ -145,7 +139,7 @@
             <span id="lang-to-label" class="lang-label">Criollo Haitiano</span>
         </div>
 
-        <button id="btn-listen" class="btn-main" disabled>🎙️ Presiona para hablar</button>
+        <button id="btn-listen" class="btn-main">🎙️ Presiona para hablar</button>
         
         <div class="box">
             <div id="label-input-box" class="box-label" style="color: var(--asalvoo-burgundy);">Texto detectado</div>
@@ -194,11 +188,11 @@
         try {
             translator = await pipeline('translation', 'Xenova/helsinki-nlp-opus-mt-es-en');
             document.getElementById('status').style.color = "#10b981"; 
-            document.getElementById('status').innerText = "Sistema listo. Operando gratis en tiempo real.";
+            document.getElementById('status').innerText = "Asalvoo Interpreta listo y protegido.";
             updateInterfaceLabels();
             showCard();
         } catch (e) {
-            document.getElementById('status').innerText = "Asalvoo Interpreta activo (Módulo nativo).";
+            document.getElementById('status').innerText = "Asalvoo Interpreta activo.";
             updateInterfaceLabels();
             showCard();
         }
@@ -221,3 +215,10 @@
         if (currentDirection === 'es-ht') {
             fromLabel.innerText = "Español";
             toLabel.innerText = "Criollo Haitiano";
+            btnListen.innerText = "🎙️ Presiona para hablar en Español";
+            inputLabel.innerText = "Español detectado";
+            outputLabel.innerText = "Traducción al Criollo Haitiano";
+        } else {
+            fromLabel.innerText = "Criollo Haitiano";
+            toLabel.innerText = "Español";
+            btnListen.innerText = "🎙️ Peze pou pale an Kreyòl";
