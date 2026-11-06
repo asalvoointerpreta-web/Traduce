@@ -48,23 +48,26 @@
             border-radius: 14px;
             border: 1px solid #e2e8f0;
         }
-        .lang-label { font-weight: 700; font-size: 15px; color: var(--asalvoo-burgundy); }
+        .lang-label { font-weight: 700; font-size: 15px; color: var(--asalvoo-burgundy); width: 110px; text-align: center; }
         
+        /* Botón de intercambio optimizado */
         .btn-swap { 
             background: white; 
             border: 1px solid #cbd5e1; 
             border-radius: 50%; 
-            width: 38px; 
-            height: 38px; 
+            width: 40px; 
+            height: 40px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             cursor: pointer; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-            font-size: 18px; 
-            font-weight: 900;
-            color: var(--asalvoo-burgundy);
             transition: transform 0.2s; 
+        }
+        .btn-swap svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--asalvoo-burgundy); /* Cambia el color de las flechas a borgoña */
         }
         .btn-swap:active { transform: scale(0.9); }
 
@@ -133,8 +136,12 @@
         
         <div class="language-selector-bar">
             <span id="lang-from-label" class="lang-label">Español</span>
-            <!-- Corregido el icono por el símbolo universal -->
-            <button class="btn-swap" onclick="swapLanguages()">⇄</button>
+            <!-- Gráfico vectorial puro que no puede fallar en pantallas móviles -->
+            <button class="btn-swap" onclick="swapLanguages()" aria-label="Cambiar idiomas">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 8l-4-4v3H5v2h10v3l4-4zM5 16l4 4v-3h10v-2H9v-3l-4 4z"/>
+                </svg>
+            </button>
             <span id="lang-to-label" class="lang-label">Criollo Haitiano</span>
         </div>
 
@@ -178,7 +185,7 @@
         { es: "Muchas gracias por tu ayuda", ht: "Mèsi anpil pou èd ou" },
         { es: "Por favor, habla más despacio", ht: "Tanpri, pale pi dousman" },
         { es: "Todo estará bien", ht: "Tout bagay ap byen pase" },
-        { es: "Dónde está el hospital?", ht: "Kote lopital la ye?" },
+        { es: "¿Dónde está el hospital?", ht: "Kote lopital la ye?" },
         { es: "Mucho gusto en conocerte", ht: "Mwen byen kontan rankontre ou" },
         { es: "¿Cuánto cuesta esto?", ht: "Konbe sa koute?" }
     ];
@@ -214,10 +221,3 @@
         if (currentDirection === 'es-ht') {
             fromLabel.innerText = "Español";
             toLabel.innerText = "Criollo Haitiano";
-            btnListen.innerText = "🎙️ Presiona para hablar en Español";
-            inputLabel.innerText = "Español detectado";
-            outputLabel.innerText = "Traducción al Criollo Haitiano";
-        } else {
-            fromLabel.innerText = "Criollo Haitiano";
-            toLabel.innerText = "Español";
-            btnListen.innerText = "🎙️ Peze pou pale an Kreyòl";
